@@ -100,4 +100,4 @@ with col_features:
 
 # Footer like section (simple text)
 st.markdown("---") # Add a horizontal rule for separation
-st.write("Built with ❤️ to fight misinformation and protect our communities") 
+st.write("Built with ❤️ to fight misinformation and protect our communities against fake news") 
