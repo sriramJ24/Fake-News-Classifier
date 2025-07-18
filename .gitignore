@@ -1,0 +1,13 @@
+# Ignore data folder and its contents
+data/
+
+# Ignore model and vectorizer files
+fake_news_model.pkl
+tfidf_vectorizer.pkl
+
+# Ignore common Python cache and environment files
+__pycache__/
+*.pyc
+.env
+.venv
+.ipynb_checkpoints/ 
