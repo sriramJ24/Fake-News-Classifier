@@ -17,30 +17,30 @@ df_true = pd.read_csv('./data/True.csv')
 df_fake['label'] = 'FAKE'
 df_true['label'] = 'REAL'
 
-# Combine data
+
 df = pd.concat([df_fake, df_true], ignore_index=True)
 df = df.sample(frac=1, random_state=42).reset_index(drop=True)
 
-# Basic text preparation
+# text preparation
 df['text'] = df['title'] + " " + df['text']
 df['text'] = df['text'].apply(text_cleaning)
 
 X = df['text']
 y = df['label']
 
-# Basic vectorizer - just counts words
+# Counts # of words
 vectorizer = CountVectorizer(max_features=1000, stop_words='english')
 X_vectorized = vectorizer.fit_transform(X)
 
-# Split data
+# Split data into training and testing
 X_train, X_test, y_train, y_test = train_test_split(
     X_vectorized, y, test_size=0.2, random_state=42)
 
-# Train model
+# Training model
 model = MultinomialNB()
 model.fit(X_train, y_train)
 
-# ===== ACCURACY TEST SECTION (TERMINAL ONLY) =====
+# Displays the accuracy of the prediction in the Terminal
 print("=" * 50)
 print("ACCURACY TEST RESULTS")
 print("=" * 50)
@@ -52,7 +52,7 @@ y_pred = model.predict(X_test)
 accuracy = accuracy_score(y_test, y_pred)
 print(f"Overall Accuracy: {accuracy:.2%}")
 
-# Confusion Matrix
+# Confusion Matrix 
 cm = confusion_matrix(y_test, y_pred)
 print("\nConfusion Matrix:")
 print("                  Predicted")
@@ -92,8 +92,12 @@ with open('basic_vectorizer.pkl', 'wb') as f:
 
 print("Basic model saved!")
 
-# Streamlit app
-st.title("🎯 Fake News Classifier")
+
+
+
+
+# UI
+st.title(" Fake News Classifier")
 st.write("A simple machine learning approach to detect fake news.")
 
 st.header("How it works:")
@@ -106,6 +110,9 @@ st.write("""
 
 st.header("Test an Article")
 user_input = st.text_area("Paste any news article or headline here:", height=200)
+
+
+
 
 if st.button("Analyze"):
     if user_input.strip() == "":
@@ -126,9 +133,9 @@ if st.button("Analyze"):
         
         # Show result
         if prediction == 'FAKE':
-            st.error(f"🔴 Prediction: FAKE (Confidence: {confidence:.1f}%)")
+            st.error(f"Prediction: FAKE (Confidence: {confidence:.1f}%)")
         else:
-            st.success(f"🟢 Prediction: REAL (Confidence: {confidence:.1f}%)")
+            st.success(f"Prediction: REAL (Confidence: {confidence:.1f}%)")
         
         # Show what words were found
         st.write("**Words the model found in your text:**")
@@ -148,6 +155,7 @@ if st.button("Analyze"):
         st.write(f"REAL probability: {probabilities[1]:.2%}")
         
 
+#UI
 st.header("Try These Examples:")
 st.write("""
 **Fake News Example:**
