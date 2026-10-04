@@ -11,3 +11,7 @@ __pycache__/
 .env
 .venv
 .ipynb_checkpoints/ 
+# Old unused model files, fine-tuned transformer, macOS junk
+models/
+.DS_Store
+.streamlit/secrets.toml

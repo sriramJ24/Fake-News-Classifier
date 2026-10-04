@@ -1,0 +1,16 @@
+{
+  "accuracy": 0.9666055630828086,
+  "headline_accuracy": 0.7141946281979756,
+  "accuracy_by_dataset": {
+    "ISOT": 0.9830552659019812,
+    "WELFake": 0.9407179487179487
+  },
+  "fake_recall": 0.9631945685188494,
+  "real_recall": 0.9693525179856115,
+  "train_size": 50188,
+  "test_size": 12547,
+  "datasets": [
+    "ISOT",
+    "WELFake"
+  ]
+}
