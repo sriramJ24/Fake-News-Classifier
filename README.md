@@ -11,11 +11,12 @@ I created a Fake News Classifier after my grandfather from India unknowingly sen
 - **Model:** TF-IDF features (single words and two-word phrases) with Logistic Regression, trained on about 50,000 unique articles from the [ISOT](https://onlineacademiccommunity.uvic.ca/isot/2022/11/27/fake-news-detection-datasets/) and [WELFake](https://zenodo.org/records/4561253) datasets.
 - **Cleaning:** It strips giveaways that reveal the *source* rather than the content, like the "WASHINGTON (Reuters) -" opening on every real ISOT article, "Featured image via Getty", URLs and @handles. Without this step the model mostly learns "Reuters = real".
 - **Fair testing:** Duplicate and empty articles are removed, and the data is split *before* the vectorizer is fitted, so test articles are truly unseen.
-- **Results:** 96.7% accuracy on 12,547 unseen articles (ISOT 98.3%, WELFake 94.1%). Headlines alone get only about 71%, so the app won't give a verdict on very short text.
-- **Optional DistilBERT:** a fine-tuned transformer model that reads meaning rather than single words. If it has been trained, the app averages its prediction with the main model's. On 4,000 unseen articles: word model 96.8%, DistilBERT 98.6%, **both together 99.2%**.
+- **Results on the same datasets:** 96.7% accuracy on 12,547 held-out articles (ISOT 98.3%, WELFake 94.1%). Headlines alone get only about 71%, so the app won't give a verdict on very short text.
+- **Results on a new dataset:** This is the more honest number. Trained on ISOT only and tested on 6,219 articles from a separate dataset ([McIntire](https://github.com/lutzhamel/fake-news/tree/master/data)), accuracy drops to **about 59%**, barely better than a coin flip. It still flags 90% of the fake articles, but it also calls most real articles fake. On ISOT itself the same model scores 99% (5-fold cross-validation). The high same-dataset scores mostly mean each dataset has its own writing style for real and fake articles, which the model learns quickly. Run `python evaluate_generalization.py` to reproduce this.
+- **Optional DistilBERT:** a fine-tuned transformer model that reads meaning rather than single words. If it has been trained, the app averages its prediction with the main model's. On a 4,000-article sample from the same datasets, the two together scored 99.2%, which carries the same caveat as above.
 - **Optional fact-check:** If an Anthropic API key is set, a "Fact-check the claims online" button asks Claude to search the web and check the article's main claims.
 
-**Limits:** The classifier judges *writing style*, not truth. Both datasets are mostly 2015–2018 English-language politics, so it is less reliable on other topics and on newer articles, including AI-written ones. Use the fact-check and a trusted news site for anything important.
+**Limits:** The classifier judges *writing style*, not truth, and as the new-dataset test shows, that style doesn't carry over well to articles from other sources. Both datasets are mostly 2015–2018 English-language politics, so it is less reliable on other topics and on newer articles, including AI-written ones. Use the fact-check and a trusted news site for anything important.
 
 ## How to run
 
@@ -58,6 +59,7 @@ Each fact-check runs a web search and costs a few cents.
 | `app.py` | Streamlit web app |
 | `train.py` | Cleans data, trains and evaluates the model |
 | `train_transformer.py` | Optional DistilBERT fine-tuning |
+| `evaluate_generalization.py` | Tests the model on a dataset it never trained on |
 | `text_utils.py` | Text cleaning shared by training and the app |
 | `model.pkl`, `metrics.json` | Trained model and its test results |
 | `assets/newspaper_bg.jpg` | Background image |

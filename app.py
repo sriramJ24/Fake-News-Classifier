@@ -280,9 +280,10 @@ with st.sidebar:
     metrics = load_metrics()
     if metrics:
         st.markdown("### Test results")
-        st.metric("Accuracy on unseen articles", f"{metrics['accuracy']:.1%}")
+        st.metric("Accuracy on held-out test articles", f"{metrics['accuracy']:.1%}")
         st.caption(f"{metrics['test_size']:,} test articles · trained on {', '.join(metrics['datasets'])}. "
-                   f"Headline only: {metrics['headline_accuracy']:.0%}.")
+                   f"Headline only: {metrics['headline_accuracy']:.0%}. "
+                   "On a news dataset it never trained on, accuracy drops to about 59%.")
     if load_transformer() is not None:
         bert_acc = json.loads((TRANSFORMER_DIR / "metrics.json").read_text())["accuracy"]
         st.caption(f"Also using a fine-tuned DistilBERT model ({bert_acc:.1%} on its own).")
