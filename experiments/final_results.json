@@ -1,0 +1,51 @@
+[
+  {
+    "approach": "Baseline: words only, ISOT",
+    "same": 0.9887261889335234,
+    "unseen": 0.5885198323121573,
+    "fake_recall": 0.9004539559014267,
+    "real_recall": 0.27998717126363054
+  },
+  {
+    "approach": "Words + style, ISOT",
+    "same": 0.9875599326163017,
+    "unseen": 0.7175104804901644,
+    "fake_recall": 0.6410505836575876,
+    "real_recall": 0.7931366260423348
+  },
+  {
+    "approach": "Words + style, ISOT + WELFake extra",
+    "same": 0.9644986208737432,
+    "unseen": 0.8153821347952274,
+    "fake_recall": 0.9053177691309987,
+    "real_recall": 0.7264271969211032
+  },
+  {
+    "approach": "CHOSEN: words + style, ISOT + WELFake extra, weighted",
+    "same": 0.9660112109618293,
+    "unseen": 0.827313769751693,
+    "fake_recall": 0.9250972762645915,
+    "real_recall": 0.7305965362411803
+  },
+  {
+    "approach": "DistilBERT, ISOT",
+    "same": 0.99575,
+    "unseen": 0.6734924217994196,
+    "fake_recall": 0.7607003891050583,
+    "real_recall": 0.5872354073123798
+  },
+  {
+    "approach": "Ensemble: DistilBERT + words/style (ISOT)",
+    "same": NaN,
+    "unseen": 0.7055788455336988,
+    "fake_recall": 0.7380025940337225,
+    "real_recall": 0.6735086593970494
+  },
+  {
+    "approach": "Ensemble: DistilBERT + chosen model",
+    "same": NaN,
+    "unseen": 0.7204127700741696,
+    "fake_recall": 0.8232814526588845,
+    "real_recall": 0.6186658114175754
+  }
+]

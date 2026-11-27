@@ -12,9 +12,9 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 from sklearn.model_selection import train_test_split
-from sklearn.pipeline import Pipeline
+from sklearn.pipeline import FeatureUnion, Pipeline
 
-from text_utils import clean_text
+from text_utils import StyleFeatures, clean_text, join_title
 
 DATA = Path("data")
 
@@ -42,7 +42,7 @@ def load_welfake():
 def load_data():
     frames = [load_isot(), load_welfake()]
     df = pd.concat([f for f in frames if f is not None], ignore_index=True)
-    df["text"] = df["title"].fillna("") + ". " + df["text"].fillna("")
+    df["text"] = [join_title(t, x) for t, x in zip(df["title"].fillna(""), df["text"].fillna(""))]
     df["cleaned"] = df["text"].map(clean_text)
 
     before = len(df)
@@ -55,17 +55,28 @@ def load_data():
 
 
 def build_model():
+    """Word features (what the article says) + style features (how it is written), then one classifier."""
     return Pipeline([
-        ("tfidf", TfidfVectorizer(
-            preprocessor=clean_text,
-            ngram_range=(1, 2),   # single words and two-word phrases
-            min_df=3,
-            max_df=0.9,
-            sublinear_tf=True,
-            max_features=100_000,
-        )),
-        ("clf", LogisticRegression(C=10, max_iter=2000)),
+        ("features", FeatureUnion([
+            ("tfidf", TfidfVectorizer(
+                preprocessor=clean_text,
+                ngram_range=(1, 2),   # single words and two-word phrases
+                min_df=3,
+                max_df=0.9,
+                sublinear_tf=True,
+                max_features=100_000,
+            )),
+            ("style", StyleFeatures()),
+        ])),
+        ("clf", LogisticRegression(C=1, max_iter=3000)),
     ])
+
+
+def fit_model(df):
+    """Train on df, giving each dataset the same total weight so the biggest one can't set the style."""
+    share = df["source"].map(df["source"].value_counts(normalize=True))
+    weights = (1 / share) / (1 / share).mean()
+    return build_model().fit(df["text"], df["label"], clf__sample_weight=weights.values)
 
 
 def main():
@@ -73,7 +84,7 @@ def main():
     train, test = train_test_split(df, test_size=0.2, random_state=42, stratify=df["label"])
 
     # Split first, then fit, so the vectorizer never sees test articles
-    model = build_model().fit(train["text"], train["label"])
+    model = fit_model(train)
 
     pred = model.predict(test["text"])
     accuracy = accuracy_score(test["label"], pred)

@@ -33,8 +33,12 @@ def load_model():
 
 @st.cache_resource(show_spinner="Loading the model…")
 def load_transformer():
-    """Optional fine-tuned DistilBERT (see train_transformer.py). None if not trained."""
-    if not TRANSFORMER_DIR.exists():
+    """Optional fine-tuned DistilBERT (see train_transformer.py), only if USE_DISTILBERT=1.
+
+    Off by default: on a dataset neither model trained on, averaging it in lowered accuracy
+    (82.7% -> 72.0%, see the README).
+    """
+    if os.environ.get("USE_DISTILBERT") != "1" or not TRANSFORMER_DIR.exists():
         return None
     try:
         from transformers import pipeline
@@ -86,7 +90,8 @@ def predict(text):
 def key_phrases(text, n=8):
     """Words/phrases in this text that pushed the word model toward fake or real."""
     model = load_model()
-    tfidf, clf = model.named_steps["tfidf"], model.named_steps["clf"]
+    # The word features come first in the model's feature list, so their weights are the first columns
+    tfidf, clf = dict(model.named_steps["features"].transformer_list)["tfidf"], model.named_steps["clf"]
     vec = tfidf.transform([text]).tocoo()
     names = tfidf.get_feature_names_out()
     sign = 1 if clf.classes_[1] == "REAL" else -1  # coef > 0 means REAL
@@ -276,13 +281,18 @@ st.markdown('<div class="foot">This tool judges <b>writing style</b>, not facts.
 with st.sidebar:
     st.markdown("### How it works")
     st.write("A model trained on tens of thousands of real and fake news articles "
-             "looks at the words and phrases used and estimates how likely the article is to be fake.")
+             "looks at the words and phrases used, and at how the article is written "
+             "(exclamation marks, ALL CAPS, quoting sources), and estimates how likely it is to be fake.")
     metrics = load_metrics()
     if metrics:
         st.markdown("### Test results")
-        st.metric("Accuracy on unseen articles", f"{metrics['accuracy']:.1%}")
-        st.caption(f"{metrics['test_size']:,} test articles · trained on {', '.join(metrics['datasets'])}. "
+        st.metric("Accuracy on held-out test articles", f"{metrics['accuracy']:.1%}")
+        caption = (f"{metrics['test_size']:,} test articles · trained on {', '.join(metrics['datasets'])}. "
                    f"Headline only: {metrics['headline_accuracy']:.0%}.")
+        unseen = metrics.get("unseen_dataset")
+        if unseen:
+            caption += f" On a news dataset it never trained on, accuracy is {unseen['accuracy']:.0%}."
+        st.caption(caption)
     if load_transformer() is not None:
         bert_acc = json.loads((TRANSFORMER_DIR / "metrics.json").read_text())["accuracy"]
         st.caption(f"Also using a fine-tuned DistilBERT model ({bert_acc:.1%} on its own).")
