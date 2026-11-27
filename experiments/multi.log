@@ -1,0 +1,14 @@
+base_v1_C10 A only        -> B2: acc 0.510 bal 0.543 fake 0.91 real 0.18
+base_v1_C10 A+B           -> B2: acc 0.538 bal 0.573 fake 0.96 real 0.19
+base_v1_C10 A+B weighted  -> B2: acc 0.542 bal 0.577 fake 0.96 real 0.19
+base_v1_C10 A only        -> B1: acc 0.646 bal 0.704 fake 0.91 real 0.50
+base_v1_C10 A+B           -> B1: acc 0.841 bal 0.866 fake 0.96 real 0.78
+base_v1_C10 A+B weighted  -> B1: acc 0.846 bal 0.873 fake 0.97 real 0.78
+base_v1_C10 mean balanced acc on held-out outlets: {'A only': 0.6235467298425832, 'A+B': 0.7194663464918205, 'A+B weighted': 0.7251622992643467}
+v2_tfidf+stylo_C1 A only        -> B2: acc 0.727 bal 0.719 fake 0.63 real 0.81
+v2_tfidf+stylo_C1 A+B           -> B2: acc 0.708 bal 0.722 fake 0.88 real 0.56
+v2_tfidf+stylo_C1 A+B weighted  -> B2: acc 0.703 bal 0.722 fake 0.93 real 0.51
+v2_tfidf+stylo_C1 A only        -> B1: acc 0.811 bal 0.772 fake 0.63 real 0.91
+v2_tfidf+stylo_C1 A+B           -> B1: acc 0.883 bal 0.876 fake 0.85 real 0.90
+v2_tfidf+stylo_C1 A+B weighted  -> B1: acc 0.908 bal 0.907 fake 0.90 real 0.91
+v2_tfidf+stylo_C1 mean balanced acc on held-out outlets: {'A only': 0.7457295971249941, 'A+B': 0.7990727657289882, 'A+B weighted': 0.8144539848107397}

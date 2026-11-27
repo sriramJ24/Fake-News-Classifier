@@ -1,0 +1,9 @@
+McIntire test articles: 6,202; ISOT 38,583; WELFake extra 17,609
+Baseline: words only, ISOT                 same 98.9%  McIntire 58.9%  fake 90%  real 28%
+Words + style, ISOT                        same 98.8%  McIntire 71.8%  fake 64%  real 79%
+Words + style, ISOT + WELFake extra        same 96.4%  McIntire 81.5%  fake 91%  real 73%
+CHOSEN: words + style, ISOT + WELFake extra, weighted same 96.6%  McIntire 82.7%  fake 93%  real 73%
+Loading weights:   0%|          | 0/104 [00:00<?, ?it/s]Loading weights: 100%|██████████| 104/104 [00:00<00:00, 7613.50it/s]
+DistilBERT, ISOT                           same 99.6%  McIntire 67.3%  fake 76%  real 59%
+Ensemble: DistilBERT + words/style (ISOT)  same nan%  McIntire 70.6%  fake 74%  real 67%
+Ensemble: DistilBERT + chosen model        same nan%  McIntire 72.0%  fake 82%  real 62%

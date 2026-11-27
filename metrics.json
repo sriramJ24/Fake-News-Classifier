@@ -1,16 +1,28 @@
 {
-  "accuracy": 0.9666055630828086,
-  "headline_accuracy": 0.7141946281979756,
+  "accuracy": 0.962455161418892,
+  "headline_accuracy": 0.7139099242726186,
   "accuracy_by_dataset": {
-    "ISOT": 0.9830552659019812,
-    "WELFake": 0.9407179487179487
+    "ISOT": 0.9847557003257329,
+    "WELFake": 0.9273100616016428
   },
-  "fake_recall": 0.9631945685188494,
-  "real_recall": 0.9693525179856115,
-  "train_size": 50188,
-  "test_size": 12547,
+  "fake_recall": 0.9537003932785126,
+  "real_recall": 0.9695007912530571,
+  "train_size": 50178,
+  "test_size": 12545,
   "datasets": [
     "ISOT",
     "WELFake"
-  ]
+  ],
+  "unseen_dataset": {
+    "dataset": "McIntire fake_or_real_news",
+    "test_size": 6202,
+    "trained_on": {
+      "ISOT": 38583,
+      "WELFake": 17609
+    },
+    "same_dataset_accuracy": 0.9672195158657118,
+    "accuracy": 0.827313769751693,
+    "fake_recall": 0.9250972762645915,
+    "real_recall": 0.7305965362411803
+  }
 }

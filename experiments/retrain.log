@@ -1,0 +1,26 @@
+Loaded 117,032 articles, kept 62,723 after removing empty and duplicate ones
+==================================================
+Test accuracy: 96.25%  (12,545 articles)
+              precision    recall  f1-score   support
+
+        FAKE     0.9618    0.9537    0.9577      5594
+        REAL     0.9630    0.9695    0.9662      6951
+
+    accuracy                         0.9625     12545
+   macro avg     0.9624    0.9616    0.9620     12545
+weighted avg     0.9625    0.9625    0.9624     12545
+
+Confusion matrix (rows = actual, cols = predicted)
+            FAKE   REAL
+FAKE        5335    259
+REAL         212   6739
+ISOT test accuracy: 98.48%
+WELFake test accuracy: 92.73%
+Headline-only accuracy: 71.39%
+==================================================
+Saved model.pkl and metrics.json
+Trained on: ISOT 38,583, WELFake 17,609
+Same datasets (5-fold):          96.7% +/- 0.2%
+New dataset (McIntire, 6,202):  82.7%
+  fake caught 93%, real kept 73%
+Added the result to metrics.json
